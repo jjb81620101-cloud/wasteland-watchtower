@@ -1,473 +1,125 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>廢土守夜站</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#20261f">
+  <link rel="icon" href="data:,">
+  <title>廢土守夜站｜可玩 v1</title>
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #10110d;
-      --panel: #1b1b15;
-      --panel-2: #252419;
-      --line: #44402c;
-      --text: #f3ead2;
-      --muted: #b7ad90;
-      --gold: #e0b451;
-      --rust: #b85b35;
-      --green: #8fb65c;
-      --red: #d45743;
-      --blue: #6ba6b8;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at 20% 0%, rgba(224, 180, 81, .16), transparent 26rem),
-        radial-gradient(circle at 80% 20%, rgba(184, 91, 53, .14), transparent 22rem),
-        var(--bg);
-      color: var(--text);
-      font-family: "Segoe UI", "Noto Sans TC", system-ui, sans-serif;
-    }
-    button {
-      border: 1px solid #6d6240;
-      border-radius: 6px;
-      background: #2e2a1d;
-      color: var(--text);
-      padding: .65rem .75rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    button:hover { background: #3b3524; }
-    button:disabled { color: #80765a; cursor: not-allowed; opacity: .65; }
-    .app {
-      width: min(1180px, 100%);
-      margin: 0 auto;
-      padding: 16px;
-      display: grid;
-      gap: 12px;
-      grid-template-columns: 1fr 330px;
-    }
-    header {
-      grid-column: 1 / -1;
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 10px;
-    }
-    h1 { margin: 0; font-size: clamp(1.55rem, 4vw, 2.4rem); letter-spacing: 0; }
-    .tagline { color: var(--muted); margin-top: 4px; }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(84px, 1fr));
-      gap: 8px;
-    }
-    .stat, .panel {
-      background: linear-gradient(180deg, rgba(255,255,255,.03), transparent), var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-    }
-    .stat { padding: 9px 10px; }
-    .label { color: var(--muted); font-size: .78rem; }
-    .value { font-size: 1.05rem; font-weight: 800; margin-top: 2px; }
-    .field {
-      position: relative;
-      min-height: 620px;
-      overflow: hidden;
-    }
-    canvas {
-      display: block;
-      width: 100%;
-      height: 620px;
-      background: #15150f;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-      touch-action: manipulation;
-    }
-    .side { display: grid; gap: 12px; align-content: start; }
-    .panel { padding: 12px; }
-    .panel h2 { margin: 0 0 10px; font-size: 1rem; }
-    .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .full { grid-column: 1 / -1; }
-    .hint { color: var(--muted); line-height: 1.45; font-size: .9rem; }
-    .cards { display: grid; gap: 8px; }
-    .card {
-      border: 1px solid #51492f;
-      border-radius: 8px;
-      padding: 10px;
-      background: var(--panel-2);
-    }
-    .card strong { display: block; }
-    .rare { color: var(--gold); }
-    .log {
-      min-height: 88px;
-      max-height: 132px;
-      overflow: auto;
-      color: #d6c89d;
-      font-size: .85rem;
-      line-height: 1.45;
-      border-top: 1px solid var(--line);
-      padding-top: 8px;
-      margin-top: 8px;
-    }
-    .bar { height: 8px; background: #342f22; border-radius: 99px; overflow: hidden; margin-top: 7px; }
-    .bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--red), var(--gold)); }
-    @media (max-width: 900px) {
-      .app { grid-template-columns: 1fr; padding: 10px; }
-      header { align-items: start; flex-direction: column; }
-      .stats { grid-template-columns: repeat(2, 1fr); width: 100%; }
-      canvas { height: 540px; }
-      .field { min-height: 540px; }
-    }
+    :root { color-scheme: dark; --void:#151914; --ground:#20261f; --paper:#2a3025; --paper2:#333a2b; --line:#687054; --ink:#f0e7cd; --muted:#b8b39a; --sun:#e1b85b; --rust:#bf6945; --cyan:#78b9bd; --moss:#a6bb70; --danger:#df6551; }
+    * { box-sizing:border-box; } body { margin:0; min-width:320px; color:var(--ink); background:radial-gradient(circle at 8% 0%,#3b462d 0,transparent 28rem),linear-gradient(145deg,#171b15,var(--void) 60%); font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; }
+    button { appearance:none; border:1px solid var(--line); background:#303727; color:var(--ink); padding:.55rem .62rem; border-radius:4px; font:700 .86rem inherit; cursor:pointer; touch-action:manipulation; } button:hover:not(:disabled),button:focus-visible { border-color:var(--sun); background:#424a32; outline:none; } button:disabled { color:#777b6a; cursor:not-allowed; opacity:.65; } button.primary { background:#795a2b; border-color:var(--sun); } button.danger { background:#513025; border-color:var(--rust); } button.active { box-shadow:inset 0 0 0 2px var(--sun); }
+    .app { width:min(1240px,100%); margin:auto; padding:12px; display:grid; grid-template-columns:minmax(0,1fr) 348px; gap:12px; }
+    header { grid-column:1/-1; display:flex; align-items:flex-end; justify-content:space-between; gap:12px; border-bottom:2px solid var(--line); padding:5px 0 11px; }
+    h1 { margin:0; font-size:clamp(1.5rem,4vw,2.35rem); letter-spacing:.06em; } .eyebrow,.label { color:var(--sun); font-size:.72rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; } .sub { color:var(--muted); margin:.25rem 0 0; font-size:.91rem; }
+    .field { position:relative; min-height:570px; border:1px solid var(--line); background:#1b2019; overflow:hidden; } canvas { display:block; width:100%; height:570px; touch-action:manipulation; } .canvas-tip { position:absolute; left:10px; bottom:9px; margin:0; padding:4px 7px; background:#151914d9; color:var(--muted); font-size:.76rem; pointer-events:none; }
+    .side { display:grid; align-content:start; gap:10px; } .panel { border:1px solid var(--line); background:linear-gradient(110deg,#2c3327,#262d22); padding:10px; } .panel h2 { font-size:.96rem; margin:0 0 8px; letter-spacing:.04em; } .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; } .stat { background:#1c211a; border-left:3px solid var(--line); padding:6px; min-width:0; } .stat b { display:block; margin-top:2px; font-size:1.05rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .two { display:grid; grid-template-columns:1fr 1fr; gap:6px; } .three { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; } .row { display:flex; justify-content:space-between; gap:8px; align-items:center; } .hint { color:var(--muted); margin:7px 0 0; font-size:.78rem; line-height:1.45; } .notice { min-height:2.35rem; color:#f4d891; font-size:.82rem; line-height:1.4; }
+    .meter { height:7px; background:#171b15; border:1px solid #4c533f; margin:5px 0 2px; overflow:hidden; } .meter>span { display:block; height:100%; background:var(--moss); transition:width .15s; } .meter.danger>span { background:var(--danger); } .meter.sun>span { background:var(--sun); }
+    .tower-info { min-height:44px; padding:6px; background:#1c211a; color:var(--muted); font-size:.8rem; line-height:1.35; } .tower-info strong { color:var(--ink); }
+    .heroes { display:grid; gap:6px; max-height:248px; overflow:auto; padding-right:2px; } .hero { display:grid; grid-template-columns:auto 1fr auto; gap:7px; align-items:center; padding:7px; border:1px solid #596047; background:#20261c; } .hero.selected { border-color:var(--sun); background:#383a24; } .badge { min-width:32px; padding:4px 2px; text-align:center; font-weight:900; font-size:.72rem; border:1px solid currentColor; } .N { color:#c4c9b8; }.R { color:var(--cyan);}.SR { color:var(--sun);}.SSR { color:#e88965; } .hero-name { font-weight:800; font-size:.86rem; } .hero-text { color:var(--muted); font-size:.72rem; margin-top:2px; } .hero-actions { display:grid; gap:3px; } .hero-actions button { padding:3px 5px; font-size:.7rem; }
+    .log { max-height:105px; overflow:auto; border-top:1px solid var(--line); padding-top:6px; color:var(--muted); font-size:.76rem; line-height:1.5; } .log div:first-child { color:#f4d891; }
+    .hidden { display:none!important; } .fine { font-size:.72rem; color:var(--muted); }
+    @media (max-width:900px) { .app { grid-template-columns:1fr; padding:8px; } header { align-items:flex-start; flex-direction:column; } .field,canvas { min-height:480px; height:480px; } .side { grid-template-columns:1fr; } }
+    @media (max-width:430px) { .three { grid-template-columns:1fr 1fr; } .stats { grid-template-columns:repeat(3,1fr); } button { font-size:.8rem; padding:.52rem .42rem; } }
+    @media (prefers-reduced-motion:reduce) { * { transition:none!important; } }
   </style>
 </head>
 <body>
   <main class="app">
     <header>
-      <div>
-        <h1>廢土守夜站</h1>
-        <div class="tagline">末日放置掛機 × 英雄上陣 × 手動塔防 × 倖存者抽卡</div>
-      </div>
-      <button id="resetBtn" type="button">重置存檔</button>
+      <div><div class="eyebrow">WASTELAND NIGHT WATCH / LOCAL SAVE</div><h1>廢土守夜站</h1><p class="sub">撐住二十夜，讓遠方的倖存者看見信號。</p></div>
+      <div class="two"><button id="saveBtn" type="button">立即存檔</button><button id="newGameBtn" class="danger" type="button">新局／重置</button></div>
     </header>
-
-    <section class="field" aria-label="戰場">
-      <canvas id="game" width="760" height="620"></canvas>
-    </section>
-
+    <section class="field" aria-label="三線防禦戰場"><canvas id="game" width="900" height="570" aria-label="點擊空格建造塔，點擊已建造的塔選擇並升級"></canvas><p class="canvas-tip" id="canvasTip">選擇塔種後，點擊格位建造。</p></section>
     <aside class="side">
-      <section class="stats" aria-label="資源">
-        <div class="stat"><div class="label">廢鐵</div><div class="value" id="scrap">0</div></div>
-        <div class="stat"><div class="label">能量</div><div class="value" id="energy">0</div></div>
-        <div class="stat"><div class="label">信標</div><div class="value" id="beacon">0</div></div>
-        <div class="stat"><div class="label">關卡</div><div class="value" id="stage">1</div></div>
-        <div class="stat"><div class="label">波次</div><div class="value" id="wave">1</div></div>
-        <div class="stat"><div class="label">基地</div><div class="value" id="baseHp">100</div></div>
-      </section>
-
-      <section class="panel">
-        <h2>建造</h2>
-        <div class="grid">
-          <button id="buildGun" type="button">機槍塔 35</button>
-          <button id="buildSlow" type="button">冷凍塔 55</button>
-          <button id="upgrade" class="full" type="button">升級火力 80</button>
-          <button id="storm" class="full" type="button">手動技能：電磁風暴 30能量</button>
-        </div>
-        <p class="hint">抽到的英雄會自動上陣射擊。你負責補塔、升級火力、在 Boss 波用手動技能收尾。</p>
-      </section>
-
-      <section class="panel">
-        <h2>倖存者抽卡</h2>
-        <div class="grid">
-          <button id="drawOne" type="button">抽 1 次 50信標</button>
-          <button id="drawTen" type="button">抽 5 次 220信標</button>
-        </div>
-        <div class="cards" id="cards"></div>
-      </section>
-
-      <section class="panel">
-        <h2>放置收益</h2>
-        <div class="row"><span>隊伍戰力</span><strong id="power">0</strong></div>
-        <button id="claimIdle" class="full" type="button">領取掛機補給</button>
-        <p class="hint">離線最多累積 6 小時。這版先做本機存檔，朋友各玩各的。</p>
-      </section>
-
-      <section class="panel">
-        <h2>狀態</h2>
-        <div class="row"><span>下一波</span><strong id="nextWave">0s</strong></div>
-        <div class="bar" aria-label="下一波進度"><span id="waveBar"></span></div>
-        <div class="log" id="log" aria-live="polite"></div>
-      </section>
+      <section class="panel" aria-label="守夜站狀態"><div class="stats"><div class="stat"><span class="label">廢鐵</span><b id="scrap">0</b></div><div class="stat"><span class="label">能量</span><b id="energy">0</b></div><div class="stat"><span class="label">信標</span><b id="beacon">0</b></div><div class="stat"><span class="label">基地</span><b id="base">Lv.1</b></div><div class="stat"><span class="label">夜次</span><b id="wave">01 / 20</b></div><div class="stat"><span class="label">狀態</span><b id="status">待命</b></div></div><div class="row fine"><span>基地耐久</span><span id="hpText">0 / 0</span></div><div class="meter danger"><span id="hpBar"></span></div></section>
+      <section class="panel"><h2>防線指令</h2><div class="two"><button id="startBtn" class="primary" type="button">開始第 1 夜</button><button id="pauseBtn" type="button">暫停戰鬥</button></div><div class="three" style="margin-top:6px"><button data-build="scout" type="button">火舌塔<br><small>40 廢鐵</small></button><button data-build="mortar" type="button">震波塔<br><small>70 廢鐵</small></button><button data-build="arc" type="button">電弧塔<br><small>85 廢鐵</small></button><button data-build="frost" type="button">霜訊塔<br><small>65 廢鐵</small></button><button id="upgradeTower" type="button">升級選中塔</button><button id="upgradeBase" type="button">升級基地</button></div><div class="tower-info" id="towerInfo">選擇塔種，點戰場空格建造。四種塔各有不同射程與特性。</div><div class="two" style="margin-top:6px"><button id="stormBtn" type="button">天譴脈衝（35 能量）</button><button id="flareBtn" type="button">誘餌照明彈（18 能量）</button></div></section>
+      <section class="panel"><h2>倖存者頻道</h2><div class="two"><button id="drawOne" type="button">徵召 1 次<br><small>50 信標</small></button><button id="drawFive" class="primary" type="button">徵召 5 次<br><small>230 信標</small></button></div><p class="hint">上陣最多 3 人。重複角色會轉為專屬碎片，可升星；所有徵召只使用遊戲內信標。</p><div class="heroes" id="heroes"></div></section>
+      <section class="panel"><h2>基地與離線補給</h2><div class="row"><span>隊伍戰力</span><strong id="power">0</strong></div><div class="row fine"><span>離線補給</span><span id="idleText">0 分鐘</span></div><div class="meter sun"><span id="idleBar"></span></div><button id="claimIdle" type="button" style="width:100%;margin-top:6px">領取離線補給</button><p class="hint">離線最長 8 小時；離線時會累積廢鐵、能量與信標。此遊戲只用本機 localStorage，不連線、不追蹤。</p></section>
+      <section class="panel"><div id="notice" class="notice" role="status" aria-live="polite"></div><div id="log" class="log" aria-live="polite"></div></section>
     </aside>
   </main>
-
   <script>
-    const canvas = document.getElementById("game");
-    const ctx = canvas.getContext("2d");
-    const lanes = [170, 310, 450];
-    const slots = [];
-    for (let x = 160; x <= 560; x += 100) for (const y of lanes) slots.push({ x, y });
-
-    const heroes = [
-      { name: "修補師 阿岚", rare: "N", scrap: 1, dmg: 1, power: 18, text: "廢鐵產量 +1/s" },
-      { name: "哨戒手 小柏", rare: "R", scrap: 0, dmg: 3, power: 34, text: "塔傷害 +3" },
-      { name: "電工 米娜", rare: "R", energy: 1, dmg: 2, power: 31, text: "能量產量 +1/s" },
-      { name: "末日隊長 玄武", rare: "SR", scrap: 2, dmg: 6, power: 72, text: "廢鐵 +2/s，塔傷害 +6" },
-      { name: "灰燼女王", rare: "SSR", energy: 2, dmg: 11, power: 130, text: "能量 +2/s，塔傷害 +11" }
+  (() => {
+    "use strict";
+    const SAVE_KEY = "wasteland-watchtower-v1";
+    const canvas = document.querySelector("#game"), ctx = canvas.getContext("2d");
+    const $ = id => document.getElementById(id);
+    const lanes = [150, 285, 420], slots = [];
+    for (let x = 190; x <= 650; x += 92) for (const y of lanes) slots.push({x,y});
+    const rarityRank = {N:1,R:2,SR:3,SSR:4};
+    const HEROES = [
+      {id:"lumen",name:"燈匠 洛恩",rarity:"N",role:"修補",atk:7,rate:1.1,passive:{scrap:.45},skill:"拆解直覺：廢鐵 +0.45/秒"},
+      {id:"moth",name:"信使 茉希",rarity:"N",role:"跑者",atk:8,rate:.95,passive:{beacon:.12},skill:"殘存頻率：信標 +0.12/秒"},
+      {id:"bark",name:"守門人 巴克",rarity:"R",role:"護衛",atk:13,rate:1.25,passive:{base:14},skill:"鐵門意志：基地耐久上限 +14"},
+      {id:"sai",name:"巡路者 賽伊",rarity:"R",role:"斥候",atk:16,rate:.82,passive:{tower:.07},skill:"標記視線：全塔傷害 +7%"},
+      {id:"quill",name:"醫官 羽棠",rarity:"R",role:"醫療",atk:12,rate:1.05,passive:{energy:.28},skill:"脈衝回收：能量 +0.28/秒"},
+      {id:"flint",name:"爆破手 燧",rarity:"R",role:"爆破",atk:19,rate:1.3,passive:{storm:.18},skill:"殘響導體：脈衝傷害 +18%"},
+      {id:"vera",name:"拾荒官 維拉",rarity:"SR",role:"管理",atk:23,rate:.92,passive:{scrap:.75},skill:"物資帳本：廢鐵 +0.75/秒"},
+      {id:"nox",name:"夜梟 諾克斯",rarity:"SR",role:"狙擊",atk:31,rate:1.45,passive:{crit:.12},skill:"夜視校準：全隊暴擊 +12%"},
+      {id:"rune",name:"電樞 露恩",rarity:"SR",role:"工程",atk:25,rate:.76,passive:{arc:.18},skill:"導電纜線：電弧塔傷害 +18%"},
+      {id:"aster",name:"霜語者 艾絲特",rarity:"SR",role:"控場",atk:27,rate:1.02,passive:{slow:.2},skill:"低溫訊號：減速效果 +20%"},
+      {id:"cinder",name:"灰燼領航 辛德",rarity:"SSR",role:"指揮",atk:43,rate:1.1,passive:{tower:.16,base:24},skill:"戰地校準：全塔傷害 +16%，耐久 +24"},
+      {id:"nova",name:"曙光播報員 諾娃",rarity:"SSR",role:"訊號",atk:38,rate:.7,passive:{beacon:.42,energy:.35},skill:"長波呼叫：信標 +0.42/秒、能量 +0.35/秒"}
     ];
-    const baseState = {
-      scrap: 90, energy: 35, beacon: 80, stage: 1, wave: 1, baseHp: 100, fireLevel: 1,
-      towers: [], enemies: [], cards: [], nextWave: 12, heroCool: 0, idleBank: 0,
-      last: performance.now(), savedAt: Date.now(), log: []
+    const heroById = Object.fromEntries(HEROES.map(h => [h.id,h]));
+    const TOWERS = {
+      scout:{name:"火舌塔",cost:40,dmg:12,range:175,cool:.34,color:"#bf6945",text:"高速單體；可暴擊"},
+      mortar:{name:"震波塔",cost:70,dmg:31,range:220,cool:1.35,color:"#e1b85b",text:"命中時震傷附近敵人"},
+      arc:{name:"電弧塔",cost:85,dmg:19,range:175,cool:.72,color:"#78b9bd",text:"跳電 2 個目標；穿透裝甲"},
+      frost:{name:"霜訊塔",cost:65,dmg:8,range:150,cool:.78,color:"#a6bb70",text:"緩速敵人；延長牽制"}
     };
-    let state = load();
-
-    function load() {
-      try {
-        const loaded = { ...structuredClone(baseState), ...JSON.parse(localStorage.getItem("wasteland-watch") || "{}") };
-        const away = Math.min(21600, Math.max(0, (Date.now() - (loaded.savedAt || Date.now())) / 1000));
-        loaded.idleBank = (loaded.idleBank || 0) + away;
-        loaded.last = performance.now();
-        if (away > 30) loaded.log = [`離線補給累積 ${Math.floor(away / 60)} 分鐘。`, ...(loaded.log || [])].slice(0, 6);
-        return loaded;
-      } catch {
-        return structuredClone(baseState);
-      }
-    }
-    function save() {
-      const keep = { ...state, enemies: [], last: performance.now(), savedAt: Date.now() };
-      localStorage.setItem("wasteland-watch", JSON.stringify(keep));
-    }
-    function note(text) {
-      state.log.unshift(text);
-      state.log = state.log.slice(0, 6);
-    }
-    function heroBonus(key) {
-      return state.cards.reduce((sum, card) => sum + (card[key] || 0), 0);
-    }
-    function squad() {
-      const rank = { SSR: 5, SR: 4, R: 3, N: 1 };
-      return [...state.cards].sort((a, b) => (rank[b.rare] - rank[a.rare]) || (b.power - a.power)).slice(0, 5);
-    }
-    function squadPower() {
-      return squad().reduce((sum, card) => sum + card.power, 0) + state.fireLevel * 12 + state.stage * 8;
-    }
-    function canPay(kind, cost) {
-      if (state[kind] < cost) return false;
-      state[kind] -= cost;
-      return true;
-    }
-    function nearestSlot(mx, my) {
-      return slots.find(s => Math.hypot(s.x - mx, s.y - my) < 34 && !state.towers.some(t => t.x === s.x && t.y === s.y));
-    }
-    function spawnWave() {
-      const boss = state.wave % 5 === 0;
-      const count = boss ? 1 : 4 + Math.floor(state.wave * 1.45);
-      for (let i = 0; i < count; i++) {
-        const lane = lanes[i % lanes.length];
-        state.enemies.push({
-          x: canvas.width + i * 48,
-          y: lane,
-          hp: (24 + state.wave * 8) * (boss ? 8 : 1),
-          max: (24 + state.wave * 8) * (boss ? 8 : 1),
-          speed: (.34 + state.wave * .012) * (boss ? .65 : 1),
-          slow: 0,
-          boss
-        });
-      }
-      note(boss ? `Boss 波：荒原巨獸出現。` : `第 ${state.wave} 波感染者靠近。`);
-      state.wave++;
-      state.nextWave = 18;
-    }
-    function addTower(type, slot) {
-      const cost = type === "slow" ? 55 : 35;
-      if (!canPay("scrap", cost)) return note("廢鐵不足。");
-      state.towers.push({ type, x: slot.x, y: slot.y, cool: 0 });
-      note(type === "slow" ? "冷凍塔已架設。" : "機槍塔已架設。");
-    }
-    function drawCards(times, cost) {
-      if (!canPay("beacon", cost)) return note("信標不足。");
-      for (let i = 0; i < times; i++) {
-        const roll = Math.random();
-        const pool = roll > .96 ? heroes[4] : roll > .82 ? heroes[3] : roll > .48 ? heroes[1 + Math.floor(Math.random() * 2)] : heroes[0];
-        state.cards.push(pool);
-        note(`招募：${pool.name}（${pool.rare}）`);
-      }
-    }
-    function tick(dt) {
-      state.scrap += (1.8 + heroBonus("scrap")) * dt;
-      state.energy += (.75 + heroBonus("energy")) * dt;
-      state.beacon += .18 * dt;
-      if (state.idleBank > 0) state.idleBank += dt;
-      state.nextWave -= dt;
-      if (state.nextWave <= 0) spawnWave();
-
-      for (const enemy of state.enemies) {
-        enemy.slow = Math.max(0, enemy.slow - dt);
-        enemy.x -= enemy.speed * (enemy.slow ? .42 : 1) * dt * 60;
-        if (enemy.x < 72) {
-          state.baseHp -= 8;
-          enemy.hp = 0;
-        }
-      }
-      const damage = 10 + state.fireLevel * 4 + heroBonus("dmg");
-      for (const tower of state.towers) {
-        tower.cool -= dt;
-        if (tower.cool > 0) continue;
-        const target = state.enemies.find(e => e.hp > 0 && Math.abs(e.y - tower.y) < 24 && Math.abs(e.x - tower.x) < 210);
-        if (!target) continue;
-        if (tower.type === "slow") target.slow = 2.2;
-        target.hp -= tower.type === "slow" ? damage * .55 : damage;
-        tower.cool = tower.type === "slow" ? .9 : .45;
-      }
-      state.heroCool -= dt;
-      if (state.heroCool <= 0 && state.cards.length) {
-        const active = squad();
-        for (let i = 0; i < active.length; i++) {
-          const lane = lanes[i % lanes.length];
-          const target = state.enemies.find(e => e.hp > 0 && Math.abs(e.y - lane) < 24) || state.enemies.find(e => e.hp > 0);
-          if (target) target.hp -= 4 + active[i].dmg + Math.floor(active[i].power / 14);
-        }
-        state.heroCool = .7;
-      }
-      const before = state.enemies.length;
-      const killedBoss = state.enemies.some(e => e.boss && e.hp <= 0);
-      state.enemies = state.enemies.filter(e => e.hp > 0);
-      const killed = before - state.enemies.length;
-      if (killed) {
-        state.scrap += killed * (5 + state.wave * .4);
-        state.beacon += killed * .9;
-      }
-      if (killedBoss) {
-        state.stage++;
-        state.beacon += 55;
-        state.scrap += 120;
-        note(`關卡 ${state.stage - 1} 已突破，補給 +120 廢鐵 / +55 信標。`);
-      }
-      if (state.baseHp <= 0) {
-        note("基地失守，守夜站重建。保留倖存者卡片。");
-        const cards = state.cards;
-        state = { ...structuredClone(baseState), cards, stage: Math.max(1, state.stage - 1), last: performance.now(), log: state.log };
-      }
-    }
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#17170f";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#312d1d";
-      ctx.fillRect(32, 104, 70, 420);
-      ctx.fillStyle = "#e0b451";
-      ctx.font = "700 18px Segoe UI";
-      ctx.fillText("守夜站", 36, 95);
-      for (const y of lanes) {
-        ctx.strokeStyle = "#50472f";
-        ctx.lineWidth = 22;
-        ctx.beginPath();
-        ctx.moveTo(80, y);
-        ctx.lineTo(canvas.width - 20, y);
-        ctx.stroke();
-        ctx.strokeStyle = "#2b281b";
-        ctx.lineWidth = 2;
-        ctx.setLineDash([8, 10]);
-        ctx.beginPath();
-        ctx.moveTo(80, y);
-        ctx.lineTo(canvas.width - 20, y);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
-      for (const s of slots) {
-        ctx.strokeStyle = state.towers.some(t => t.x === s.x && t.y === s.y) ? "#6d6240" : "#3a3524";
-        ctx.strokeRect(s.x - 24, s.y - 24, 48, 48);
-      }
-      squad().forEach((hero, i) => {
-        const y = lanes[i % lanes.length] - 36 + Math.floor(i / lanes.length) * 72;
-        ctx.fillStyle = hero.rare === "SSR" ? "#e0b451" : hero.rare === "SR" ? "#b85b35" : "#6ba6b8";
-        ctx.fillRect(48, y - 13, 26, 26);
-        ctx.fillStyle = "#10110d";
-        ctx.font = "700 11px Segoe UI";
-        ctx.fillText(hero.rare, 51, y + 4);
-      });
-      for (const tower of state.towers) {
-        ctx.fillStyle = tower.type === "slow" ? "#6ba6b8" : "#b85b35";
-        ctx.beginPath();
-        ctx.arc(tower.x, tower.y, 20, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#10110d";
-        ctx.fillRect(tower.x - 6, tower.y - 26, 12, 22);
-      }
-      for (const e of state.enemies) {
-        ctx.fillStyle = e.boss ? "#d45743" : e.slow ? "#8cc7d6" : "#8fb65c";
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, e.boss ? 28 : 16, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#3d1814";
-        ctx.fillRect(e.x - 22, e.y - (e.boss ? 42 : 27), 44, 5);
-        ctx.fillStyle = "#d45743";
-        ctx.fillRect(e.x - 22, e.y - (e.boss ? 42 : 27), 44 * Math.max(0, e.hp / e.max), 5);
-      }
-    }
-    function renderUi() {
-      const set = (id, value) => document.getElementById(id).textContent = value;
-      set("scrap", Math.floor(state.scrap));
-      set("energy", Math.floor(state.energy));
-      set("beacon", Math.floor(state.beacon));
-      set("stage", state.stage);
-      set("wave", state.wave);
-      set("baseHp", Math.max(0, Math.floor(state.baseHp)));
-      set("power", squadPower());
-      set("nextWave", `${Math.max(0, Math.ceil(state.nextWave))}s`);
-      document.getElementById("waveBar").style.width = `${Math.max(0, Math.min(100, (18 - state.nextWave) / 18 * 100))}%`;
-      document.getElementById("buildGun").disabled = state.scrap < 35;
-      document.getElementById("buildSlow").disabled = state.scrap < 55;
-      document.getElementById("upgrade").disabled = state.scrap < 80;
-      document.getElementById("storm").disabled = state.energy < 30;
-      document.getElementById("drawOne").disabled = state.beacon < 50;
-      document.getElementById("drawTen").disabled = state.beacon < 220;
-      document.getElementById("log").innerHTML = state.log.map(x => `<div>${x}</div>`).join("");
-      const counts = new Map();
-      for (const card of state.cards) counts.set(card.name, { card, n: (counts.get(card.name)?.n || 0) + 1 });
-      document.getElementById("cards").innerHTML = [...counts.values()].map(({ card, n }) =>
-        `<div class="card"><strong class="${card.rare === "SSR" || card.rare === "SR" ? "rare" : ""}">${card.name} ×${n}</strong><span class="hint">${card.rare}｜${card.text}</span></div>`
-      ).join("") || `<p class="hint">還沒有倖存者。先抽一張，讓基地更耐掛。</p>`;
-    }
-    let buildMode = "gun";
-    canvas.addEventListener("click", (event) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width * canvas.width;
-      const y = (event.clientY - rect.top) / rect.height * canvas.height;
-      const slot = nearestSlot(x, y);
-      if (slot) addTower(buildMode, slot);
-    });
-    document.getElementById("buildGun").onclick = () => { buildMode = "gun"; note("選擇機槍塔，點戰場格子放置。"); };
-    document.getElementById("buildSlow").onclick = () => { buildMode = "slow"; note("選擇冷凍塔，點戰場格子放置。"); };
-    document.getElementById("upgrade").onclick = () => {
-      if (canPay("scrap", 80)) { state.fireLevel++; note(`火力升級到 Lv.${state.fireLevel}`); }
-    };
-    document.getElementById("storm").onclick = () => {
-      if (!canPay("energy", 30)) return;
-      for (const e of state.enemies) e.hp -= 42 + state.fireLevel * 6;
-      note("電磁風暴掃過戰場。");
-    };
-    document.getElementById("drawOne").onclick = () => drawCards(1, 50);
-    document.getElementById("drawTen").onclick = () => drawCards(5, 220);
-    document.getElementById("claimIdle").onclick = () => {
-      const seconds = Math.min(21600, state.idleBank || 0);
-      if (seconds < 10) return note("補給還太少，等一下再領。");
-      state.scrap += seconds * (1.6 + heroBonus("scrap"));
-      state.energy += seconds * (.55 + heroBonus("energy"));
-      state.beacon += seconds * .16;
-      state.idleBank = 0;
-      note(`已領取 ${Math.floor(seconds / 60)} 分鐘掛機補給。`);
-    };
-    document.getElementById("resetBtn").onclick = () => {
-      localStorage.removeItem("wasteland-watch");
-      state = structuredClone(baseState);
-      note("存檔已重置。");
-    };
-    function loop(now) {
-      const dt = Math.min(.08, (now - state.last) / 1000 || 0);
-      state.last = now;
-      tick(dt);
-      draw();
-      renderUi();
-      requestAnimationFrame(loop);
-    }
-    function selfCheck() {
-      console.assert(heroes.some(h => h.rare === "SSR"), "gacha has SSR");
-      const old = structuredClone(state);
-      state = { ...structuredClone(baseState), enemies: [{ x: 300, y: lanes[0], hp: 10, max: 10, speed: 0, slow: 0 }], towers: [{ type: "gun", x: 250, y: lanes[0], cool: 0 }], last: performance.now() };
-      tick(.5);
-      console.assert(state.enemies.length === 0, "tower kills weak enemy");
-      state = old;
-    }
-    selfCheck();
-    note("守夜站上線。先放機槍塔，撐過第 1 波。");
-    requestAnimationFrame(loop);
-    setInterval(save, 4000);
+    const fresh = () => ({version:1,scrap:150,energy:45,beacon:120,baseLevel:1,baseHp:120,wave:1,status:"ready",towers:[],owned:{},team:[],enemies:[],queue:[],selectedTower:null,buildMode:"scout",idleSeconds:0,savedAt:Date.now(),last:performance.now(),autoTimer:0,heroTimer:0,logs:["守夜站已接通。先架塔，然後按下開始。"]});
+    let state = load(), notice = "", rosterMarkup = "";
+    function cleanState(raw) { const s = {...fresh(),...raw}; s.towers = Array.isArray(s.towers) ? s.towers : []; s.enemies=[]; s.queue=[]; s.team=(s.team||[]).filter(id=>heroById[id]).slice(0,3); s.owned=s.owned||{}; s.selectedTower=null; s.last=performance.now(); return s; }
+    function load() { try { const saved=localStorage.getItem(SAVE_KEY); if (!saved) return fresh(); const s=cleanState(JSON.parse(saved)); const away=Math.max(0,Math.min(28800,(Date.now()-(s.savedAt||Date.now()))/1000)); s.idleSeconds=Math.min(28800,(s.idleSeconds||0)+away); if(away>=20) s.logs.unshift(`偵測到離線 ${Math.floor(away/60)} 分鐘，補給已記帳。`); return s; } catch { return fresh(); } }
+    function persist(message="已存入本機存檔。") { state.savedAt=Date.now(); localStorage.setItem(SAVE_KEY,JSON.stringify({...state,enemies:[],queue:[],last:0,autoTimer:0,heroTimer:0})); notice=message; }
+    function log(text) { state.logs.unshift(text); state.logs=state.logs.slice(0,7); notice=text; }
+    function teamData() { return state.team.map(id => ({hero:heroById[id],owned:state.owned[id]})).filter(x=>x.owned); }
+    function factor(id) { const o=state.owned[id]; return o ? (1+(o.level-1)*.12+(o.star||0)*.22) : 0; }
+    function bonus(key) { return teamData().reduce((n,x)=>n+(x.hero.passive[key]||0)*factor(x.hero.id),0); }
+    function maxHp() { return 120+(state.baseLevel-1)*35+bonus("base"); }
+    function power() { return Math.floor(teamData().reduce((n,x)=>n+x.hero.atk*factor(x.hero.id)*10,0)+(state.baseLevel*18)+state.towers.reduce((n,t)=>n+(TOWERS[t.type].dmg*t.level*3),0)); }
+    function costTowerUpgrade(t) { return 28+t.level*32; }
+    function costBase() { return 150*state.baseLevel; }
+    function pay(key,n) { if(state[key]<n) { log(`${key==="scrap"?"廢鐵":key==="energy"?"能量":"信標"}不足。`); return false; } state[key]-=n; return true; }
+    function waveInfo(w) { const boss=w%5===0, elite=!boss&&w%4===0; return {boss,elite,count:boss?1:4+Math.floor(w*1.5),hp:28+w*12*(elite?2.1:1)*(boss?7.2:1),speed:.37+w*.012,armor:boss?Math.floor(w*.8):elite?Math.floor(w*.38):w>=7?Math.floor(w*.12):0}; }
+    function startWave() { if(state.status==="paused") return; if(state.wave>20) { state.status="victory"; return; } if(state.status==="defeat") { log("請先重整防線。 "); return; } if(state.queue.length||state.enemies.length) return; const info=waveInfo(state.wave); state.status="running"; state.autoTimer=0; for(let i=0;i<info.count;i++) { const trait=info.boss?"boss":info.elite?"elite":["raider","runner","plated","spore"][(state.wave+i)%4]; state.queue.push({delay:i*(info.boss?0:0.72),lane:i%3,trait,hp:info.hp*(trait==="runner"?.7:1),speed:info.speed*(trait==="runner"?1.65:1),armor:info.armor+(trait==="plated"?4:0),boss:info.boss,elite:info.elite}); } log(info.boss?`第 ${state.wave} 夜：巨獸「燼原吞噬者」逼近。` : info.elite?`第 ${state.wave} 夜：精英掠奪隊已現身。` : `第 ${state.wave} 夜開始，防線交火。`); }
+    function spawnQueue(dt) { state.queue.forEach(q=>q.delay-=dt); const ready=state.queue.filter(q=>q.delay<=0); state.queue=state.queue.filter(q=>q.delay>0); for(const q of ready) state.enemies.push({...q,x:canvas.width+25,y:lanes[q.lane],maxHp:q.hp,slow:0,mark:0}); }
+    function makeTower(slot,type) { const info=TOWERS[type]; if(!info||!pay("scrap",info.cost)) return; state.towers.push({id:Date.now()+Math.random(),type,x:slot.x,y:slot.y,level:1,cool:0}); log(`${info.name}已接上防線。`); }
+    function selected() { return state.towers.find(t=>t.id===state.selectedTower); }
+    function hit(enemy,damage,pierce=0) { enemy.hp-=Math.max(1,damage-Math.max(0,enemy.armor-pierce)); }
+    function targetFor(t) { const r=TOWERS[t.type].range; return state.enemies.filter(e=>e.hp>0&&Math.hypot(e.x-t.x,e.y-t.y)<=r).sort((a,b)=>a.x-b.x)[0]; }
+    function towerFire(t) { const info=TOWERS[t.type], target=targetFor(t); if(!target) return; const mult=1+(t.level-1)*.38+bonus("tower"); const dmg=info.dmg*mult; if(t.type==="scout") { const crit=Math.random()<(.08+bonus("crit")); hit(target,dmg*(crit?1.8:1)); }
+      if(t.type==="mortar") { for(const e of state.enemies) if(Math.hypot(e.x-target.x,e.y-target.y)<72) hit(e,dmg*.72); hit(target,dmg); }
+      if(t.type==="arc") { const chain=state.enemies.filter(e=>e!==target&&Math.hypot(e.x-target.x,e.y-target.y)<105).slice(0,2); hit(target,dmg,8); chain.forEach((e,i)=>hit(e,dmg*(.72-i*.12)*(1+bonus("arc")),8)); }
+      if(t.type==="frost") { hit(target,dmg); target.slow=Math.max(target.slow,1.65*(1+bonus("slow"))); }
+      t.cool=info.cool; }
+    function heroFire() { for(const x of teamData()) { const target=state.enemies.filter(e=>e.hp>0).sort((a,b)=>a.x-b.x)[0]; if(!target) break; const attack=x.hero.atk*factor(x.hero.id); hit(target,attack*(1+bonus("tower")*.2)); } }
+    function resolveDeaths() { const dead=state.enemies.filter(e=>e.hp<=0); if(!dead.length) return; state.enemies=state.enemies.filter(e=>e.hp>0); const boss=dead.find(e=>e.boss); state.scrap+=dead.reduce((n,e)=>n+(e.boss?130:e.elite?28:8),0); state.beacon+=dead.reduce((n,e)=>n+(e.boss?65:e.elite?7:1.4),0); if(boss) log("巨獸倒下，訊號塔將路線標入地圖。 "); }
+    function finishWave() { if(state.queue.length||state.enemies.length||state.status!=="running") return; const done=state.wave; state.wave++; state.status=state.wave>20?"victory":"ready"; state.autoTimer=state.status==="ready"?5:0; state.baseHp=Math.min(maxHp(),state.baseHp+7+state.baseLevel*2); log(state.status==="victory"?"二十夜皆已守住：守夜站 v1 通關。":"第 "+done+" 夜守住，五秒後推進下一夜。 "); }
+    function tick(dt) { if(state.status==="paused"||state.status==="defeat"||state.status==="victory") return; state.scrap+=(.62+state.baseLevel*.16+bonus("scrap"))*dt; state.energy+=(.24+bonus("energy"))*dt; state.beacon+=(.055+bonus("beacon"))*dt; state.idleSeconds=Math.min(28800,state.idleSeconds+dt); if(state.status==="ready"&&state.autoTimer>0) { state.autoTimer-=dt; if(state.autoTimer<=0) startWave(); } if(state.status!=="running") return; spawnQueue(dt); for(const e of state.enemies) { e.slow=Math.max(0,e.slow-dt); e.x-=e.speed*(e.slow?0.42:1)*dt*60; if(e.x<72) { state.baseHp-=e.boss?34:e.elite?16:9; e.hp=0; log(e.boss?"巨獸撞擊基地！":"敵人穿過防線，基地受損。 "); } }
+      for(const t of state.towers) { t.cool-=dt; if(t.cool<=0) towerFire(t); } state.heroTimer-=dt; if(state.heroTimer<=0) { heroFire(); state.heroTimer=.92; } resolveDeaths(); if(state.baseHp<=0) { state.baseHp=0; state.status="defeat"; state.enemies=[];state.queue=[];log("基地失守：保留資源與倖存者，可重整後從本夜再戰。 "); } else finishWave(); }
+    function storm() { if(!pay("energy",35)) return; const dmg=(48+state.baseLevel*12)*(1+bonus("storm")); state.enemies.forEach(e=>{hit(e,dmg,10); e.mark=1;}); log("天譴脈衝掃過全場。 "); resolveDeaths(); }
+    function flare() { if(!pay("energy",18)) return; state.enemies.forEach(e=>e.slow=Math.max(e.slow,2.6)); log("誘餌照明彈升空，敵群被拖慢。 "); }
+    function recruit(times,cost) { if(!pay("beacon",cost)) return; let gotten=[]; for(let i=0;i<times;i++) { const r=Math.random(), pool=HEROES.filter(h=>r> .975?h.rarity==="SSR":r>.86?h.rarity==="SR":r>.48?h.rarity==="R":h.rarity==="N"); const h=pool[Math.floor(Math.random()*pool.length)]; if(state.owned[h.id]) { state.owned[h.id].fragments+=18+rarityRank[h.rarity]*7; gotten.push(`${h.name}→碎片`); } else { state.owned[h.id]={level:1,star:0,fragments:0}; gotten.push(h.name); } } log(`徵召結果：${gotten.join("、")}。`); }
+    function toggleTeam(id) { if(!state.owned[id]) return; const n=state.team.indexOf(id); if(n>=0) { state.team.splice(n,1); log(`${heroById[id].name}已撤離防線。`); } else if(state.team.length>=3) log("防線只能上陣 3 人。 "); else { state.team.push(id); log(`${heroById[id].name}已上陣。`); } }
+    function levelHero(id) { const o=state.owned[id], cost=45*o.level; if(!o||!pay("scrap",cost))return; o.level++; log(`${heroById[id].name}升至 Lv.${o.level}。`); }
+    function starHero(id) { const o=state.owned[id], need=35+(o.star||0)*25; if(!o||o.fragments<need) { log(`碎片不足，升星需要 ${need}。`); return; } o.fragments-=need;o.star=(o.star||0)+1;log(`${heroById[id].name}升至 ${o.star} 星。`); }
+    function claimIdle() { const sec=Math.min(28800,state.idleSeconds); if(sec<15) { log("補給尚未累積到可領取量。 "); return; } const scrap=Math.floor(sec*(.5+state.baseLevel*.12+bonus("scrap"))), energy=Math.floor(sec*(.18+bonus("energy"))), beacon=Math.floor(sec*(.05+bonus("beacon"))); state.scrap+=scrap;state.energy+=energy;state.beacon+=beacon;state.idleSeconds=0;log(`取得離線補給：${scrap} 廢鐵、${energy} 能量、${beacon} 信標。`); }
+    function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="#20261f";ctx.fillRect(0,0,canvas.width,canvas.height); ctx.fillStyle="#5d6248";ctx.fillRect(32,66,56,440); ctx.fillStyle="#e1b85b";ctx.font="700 17px system-ui";ctx.fillText("守夜",29,45); for(const y of lanes){ctx.strokeStyle="#6a6749";ctx.lineWidth=34;ctx.beginPath();ctx.moveTo(70,y);ctx.lineTo(canvas.width-15,y);ctx.stroke();ctx.strokeStyle="#3d432f";ctx.lineWidth=2;ctx.setLineDash([10,12]);ctx.beginPath();ctx.moveTo(70,y);ctx.lineTo(canvas.width-15,y);ctx.stroke();ctx.setLineDash([]);}
+      for(const s of slots){const t=state.towers.find(t=>t.x===s.x&&t.y===s.y);ctx.strokeStyle=t&&t.id===state.selectedTower?"#e1b85b":t?"#8e956f":"#49503c";ctx.lineWidth=t&&t.id===state.selectedTower?3:1;ctx.strokeRect(s.x-26,s.y-26,52,52);} teamData().forEach((x,i)=>{ctx.fillStyle=HEROES.find(h=>h.id===x.hero.id).rarity==="SSR"?"#e88965":"#78b9bd";ctx.fillRect(43,lanes[i]-18,25,36);ctx.fillStyle="#151914";ctx.font="700 12px system-ui";ctx.fillText(x.hero.role.slice(0,1),50,lanes[i]+5);});
+      for(const t of state.towers){ctx.fillStyle=TOWERS[t.type].color;ctx.beginPath();ctx.arc(t.x,t.y,18,0,Math.PI*2);ctx.fill();ctx.fillStyle="#151914";ctx.font="700 12px system-ui";ctx.fillText("L"+t.level,t.x-9,t.y+4);} for(const e of state.enemies){ctx.fillStyle=e.boss?"#df6551":e.elite?"#e1b85b":e.trait==="plated"?"#8f9684":e.slow?"#78b9bd":"#a6bb70";ctx.beginPath();ctx.arc(e.x,e.y,e.boss?27:e.elite?20:15,0,Math.PI*2);ctx.fill();ctx.fillStyle="#281817";ctx.fillRect(e.x-22,e.y-(e.boss?40:27),44,5);ctx.fillStyle="#df6551";ctx.fillRect(e.x-22,e.y-(e.boss?40:27),44*Math.max(0,e.hp/e.maxHp),5);if(e.armor){ctx.fillStyle="#f0e7cd";ctx.font="10px system-ui";ctx.fillText("甲"+e.armor,e.x-12,e.y+4);}} if(state.status==="paused"||state.status==="defeat"||state.status==="victory"){ctx.fillStyle="#151914c9";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#f0e7cd";ctx.font="700 30px system-ui";ctx.textAlign="center";ctx.fillText(state.status==="paused"?"戰鬥暫停":state.status==="defeat"?"基地失守":"二十夜已守住",canvas.width/2,canvas.height/2);ctx.textAlign="start";} }
+    function renderHeroes() { const markup=HEROES.filter(h=>state.owned[h.id]).sort((a,b)=>rarityRank[b.rarity]-rarityRank[a.rarity]).map(h=>{const o=state.owned[h.id],on=state.team.includes(h.id),need=35+(o.star||0)*25;return `<div class="hero ${on?"selected":""}"><span class="badge ${h.rarity}">${h.rarity}</span><div><div class="hero-name">${h.name} <span class="fine">Lv.${o.level}／${o.star||0}星</span></div><div class="hero-text">${h.skill}｜碎片 ${o.fragments}</div></div><div class="hero-actions"><button data-team="${h.id}" type="button">${on?"撤離":"上陣"}</button><button data-level="${h.id}" type="button">升級 ${45*o.level}</button><button data-star="${h.id}" type="button" ${o.fragments<need?"disabled":""}>升星 ${need}</button></div></div>`;}).join("")||"<p class=\"hint\">頻道空白。用信標徵召第一位倖存者。</p>"; if(markup!==rosterMarkup){$("heroes").innerHTML=markup;rosterMarkup=markup;} }
+    function render() { const s=state; $("scrap").textContent=Math.floor(s.scrap);$("energy").textContent=Math.floor(s.energy);$("beacon").textContent=Math.floor(s.beacon);$("base").textContent="Lv."+s.baseLevel;$("wave").textContent=String(Math.min(s.wave,20)).padStart(2,"0")+" / 20"; const labels={ready:"待命",running:"交火",paused:"暫停",defeat:"失守",victory:"通關"};$("status").textContent=labels[s.status];$("hpText").textContent=Math.ceil(s.baseHp)+" / "+Math.floor(maxHp());$("hpBar").style.width=Math.max(0,s.baseHp/maxHp()*100)+"%";$("power").textContent=power();$("notice").textContent=notice;$("log").innerHTML=s.logs.map(x=>"<div>▸ "+x+"</div>").join(""); const idle=Math.floor(s.idleSeconds/60);$("idleText").textContent=idle+" / 480 分鐘";$("idleBar").style.width=Math.min(100,s.idleSeconds/28800*100)+"%";$("startBtn").textContent=s.status==="defeat"?"重整本夜":s.status==="paused"?"繼續戰鬥":s.status==="running"?"第 "+s.wave+" 夜交火中":s.status==="victory"?"已完成 20 夜":"開始第 "+s.wave+" 夜";$("startBtn").disabled=s.status==="running"||s.status==="victory";$("pauseBtn").disabled=!(["running","paused"].includes(s.status));$("pauseBtn").textContent=s.status==="paused"?"繼續戰鬥":"暫停戰鬥"; const st=selected();$("towerInfo").innerHTML=st?`<strong>${TOWERS[st.type].name} Lv.${st.level}</strong>｜${TOWERS[st.type].text}<br>升級需要 ${costTowerUpgrade(st)} 廢鐵。`:"選擇塔種，點戰場空格建造；點已建塔可選擇升級。";$("upgradeTower").disabled=!st||s.scrap<costTowerUpgrade(st);$("upgradeBase").textContent="升級基地 "+costBase();$("upgradeBase").disabled=s.scrap<costBase(); document.querySelectorAll("[data-build]").forEach(b=>b.classList.toggle("active",b.dataset.build===s.buildMode)); $("canvasTip").textContent=st?"已選擇：點「升級選中塔」，或點空格改建新塔。":"建造模式："+TOWERS[s.buildMode].name+"。點亮的格位可建塔。"; renderHeroes(); draw(); }
+    canvas.addEventListener("click",e=>{const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*canvas.width,y=(e.clientY-r.top)/r.height*canvas.height; const existing=state.towers.find(t=>Math.hypot(t.x-x,t.y-y)<28);if(existing){state.selectedTower=existing.id;notice="已選擇 "+TOWERS[existing.type].name+"。";return;}const slot=slots.find(s=>Math.hypot(s.x-x,s.y-y)<32&&!state.towers.some(t=>t.x===s.x&&t.y===s.y));if(slot)makeTower(slot,state.buildMode);else notice="請點亮空格建塔，或點現有塔選擇。";});
+    document.querySelectorAll("[data-build]").forEach(b=>b.addEventListener("click",()=>{state.buildMode=b.dataset.build;state.selectedTower=null;notice="已選擇 "+TOWERS[state.buildMode].name+"。";}));
+    $("startBtn").onclick=()=>{if(state.status==="defeat"){state.baseHp=maxHp();state.status="ready";log("防線已重整，從第 "+state.wave+" 夜再戰。 ");}else if(state.status==="paused"){state.status="running";log("戰鬥繼續。 ");}else startWave();}; $("pauseBtn").onclick=()=>{if(state.status==="running"){state.status="paused";notice="戰鬥已暫停。";}else if(state.status==="paused"){state.status="running";notice="戰鬥繼續。";}}; $("upgradeTower").onclick=()=>{const t=selected();if(t&&pay("scrap",costTowerUpgrade(t))){t.level++;log(`${TOWERS[t.type].name}升至 Lv.${t.level}。`);}}; $("upgradeBase").onclick=()=>{if(pay("scrap",costBase())){state.baseLevel++;state.baseHp=Math.min(maxHp(),state.baseHp+35);log(`基地升至 Lv.${state.baseLevel}，耐久與產能提升。`);}}; $("stormBtn").onclick=storm;$("flareBtn").onclick=flare;$("drawOne").onclick=()=>recruit(1,50);$("drawFive").onclick=()=>recruit(5,230);$("claimIdle").onclick=claimIdle;$("saveBtn").onclick=()=>persist();$("newGameBtn").onclick=()=>{if(confirm("確定開始新局？目前本機存檔會被清除。")){localStorage.removeItem(SAVE_KEY);state=fresh();notice="已開始新局。";}};
+    $("heroes").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.team)toggleTeam(b.dataset.team);if(b.dataset.level)levelHero(b.dataset.level);if(b.dataset.star)starHero(b.dataset.star);}); window.addEventListener("beforeunload",()=>persist("")); setInterval(()=>persist(""),5000);
+    function loop(now){const dt=Math.min(.08,Math.max(0,(now-state.last)/1000));state.last=now;tick(dt);render();requestAnimationFrame(loop);} render();requestAnimationFrame(loop);
+  })();
   </script>
 </body>
 </html>
