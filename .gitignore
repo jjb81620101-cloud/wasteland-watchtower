@@ -3,3 +3,5 @@ crv-v5-battle-a/
 crv-v5-battle-b/
 crv-v6-playlist-*/
 .playwright-cli/
+node_modules/
+test-results/

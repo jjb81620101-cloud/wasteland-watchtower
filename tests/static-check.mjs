@@ -1,0 +1,10 @@
+import {readFile,readdir,stat} from 'node:fs/promises';
+const html=await readFile('index.html','utf8'),js=await readFile('src/v8.js','utf8');
+const required=['styles/v8.css','src/v8.js','vendor/three/three.module.min.js','assets/3d/lis.gltf','assets/3d/zombie.gltf'];
+for(const file of required)await stat(file);
+if(!html.includes('type="importmap"')||!html.includes('src/v8.js'))throw Error('v8 modules not wired');
+if(/https?:\/\//.test(js))throw Error('runtime external URL found');
+if(!js.includes('prefers-reduced-motion')||!js.includes('v8-fallback'))throw Error('motion/fallback guard missing');
+const models=(await readdir('assets/3d')).filter(x=>x.endsWith('.gltf'));
+if(models.length<6)throw Error('required character/enemy models missing');
+console.log(`PASS static v8: ${models.length} local glTF, no runtime external URL, fallback and reduced motion present`);
