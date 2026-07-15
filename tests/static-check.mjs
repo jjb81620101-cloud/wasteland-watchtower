@@ -5,6 +5,8 @@ for(const file of required)await stat(file);
 if(!html.includes('type="importmap"')||!html.includes('src/v8.js'))throw Error('v8 modules not wired');
 if(/https?:\/\//.test(js))throw Error('runtime external URL found');
 if(!js.includes('prefers-reduced-motion')||!js.includes('v8-fallback'))throw Error('motion/fallback guard missing');
+if(js.includes('s.team.slice(0,3)'))throw Error('battle models must reconcile the seven-slot formation, not the three-person team');
+if(!js.includes('reconcileUnits')||!js.includes('this.units=new Map()'))throw Error('battle formation reconciliation guard missing');
 const models=(await readdir('assets/3d')).filter(x=>x.endsWith('.gltf'));
 if(models.length<6)throw Error('required character/enemy models missing');
 console.log(`PASS static v8: ${models.length} local glTF, no runtime external URL, fallback and reduced motion present`);

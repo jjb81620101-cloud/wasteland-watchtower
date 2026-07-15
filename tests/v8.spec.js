@@ -56,3 +56,50 @@ test('desktop and v7 save migration/fallback contract',async({page})=>{
  const fallback=await page.evaluate(()=>{const c=document.createElement('div');c.className='v8-fallback';c.textContent='fallback test';document.querySelector('.battlefield').prepend(c);return !!document.querySelector('[data-act="battle"], [data-act="repair"]')});
  expect(fallback).toBeTruthy();
 });
+
+test('v9 portrait field reconciles 1, 3, and 7 defenders while enemies advance downward',async({page})=>{
+ await page.goto('http://127.0.0.1:4173/?smoke=1',{waitUntil:'networkidle'});
+ await page.locator('[data-tab="campaign"]').click();
+ await expect(page.locator('.v8-battle-canvas')).toBeVisible();
+ const field=await page.locator('.battlefield').boundingBox();
+ expect(field.height/field.width).toBeGreaterThan(1.45);
+
+ for(const count of[1,3,7]){
+   await page.evaluate(n=>window.__watchtower.smokeFormation(n),count);
+   await page.waitForFunction(n=>window.__watchtowerV9?.battleSnapshot()?.unitCount===n,count);
+   const snapshot=await page.evaluate(()=>window.__watchtowerV9.battleSnapshot());
+   expect(snapshot.formationCount).toBe(count);
+   expect(snapshot.unitCount).toBe(count);
+   expect(snapshot.units.every(unit=>unit.screenY>.62)).toBeTruthy();
+   await page.waitForTimeout(150);
+   await page.screenshot({path:`test-results/v9-mobile-${count}-defenders.png`,fullPage:true});
+ }
+
+ await page.evaluate(()=>window.__watchtower.smokeFormation(3));
+ await page.locator('[data-act="battle"]').click();
+ await page.locator('[data-act="summon"]').click();
+ await page.waitForFunction(()=>window.__watchtowerV9?.battleSnapshot()?.unitCount===4);
+ expect((await page.evaluate(()=>window.__watchtowerV9.battleSnapshot())).formationCount).toBe(4);
+
+ await page.evaluate(()=>window.__watchtower.smokeFormation(1));
+ await page.waitForFunction(()=>window.__watchtowerV9?.battleSnapshot()?.enemies.length>0);
+ const before=await page.evaluate(()=>window.__watchtowerV9.battleSnapshot());
+ const enemy=before.enemies[0];
+ expect(enemy.screenY).toBeLessThan(.55);
+ await page.waitForTimeout(500);
+ const after=await page.evaluate(id=>window.__watchtowerV9.battleSnapshot().enemies.find(x=>x.id===id),enemy.id);
+ expect(after).toBeTruthy();
+ expect(after.worldZ).toBeGreaterThan(enemy.worldZ);
+ expect(after.screenY).toBeGreaterThan(enemy.screenY);
+
+ await page.evaluate(()=>window.__watchtower.smokeFormation(7));
+ await page.setViewportSize({width:320,height:700});
+ await page.waitForFunction(()=>window.__watchtowerV9?.battleSnapshot()?.unitCount===7);
+ const compact=await page.evaluate(()=>({
+   fits:document.documentElement.scrollWidth<=innerWidth,
+   cards:[...document.querySelectorAll('.unit-card')].every(card=>{const r=card.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth})
+ }));
+ expect(compact.fits).toBeTruthy();
+ expect(compact.cards).toBeTruthy();
+ await page.screenshot({path:'test-results/v9-mobile-320-seven-defenders.png',fullPage:true});
+});
